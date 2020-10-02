@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>ZYL花城-修改个人信息</title>
+<link rel="shortcut icon" href="../../images/copylogo.png" type="image/x-icon" />
+<link rel="stylesheet" href="../css/common.css">
+<link rel="stylesheet" href="../css/main.css">
+<script type="text/javascript" src="../js/jquery.min.js"></script>
+
+</head>
+<body>
+<div class="easyui-panel" title="<center>个人信息修改</center>"
+		style="padding:3% 20%; text-align: center; width: 100%;height:100%; ">
+		<form action="" id="changeAdmForm" data-options="novalidate:true" onSubmit="return false">
+			<div style="margin-bottom: 20px">
+				<input class="easyui-textbox" id="aid" style="width: 40%"  readonly="readonly" 
+					data-options="label:'编号：',iconCls:'icon-man'">
+			</div>
+			<div style="margin-bottom: 20px">
+				<input class="easyui-textbox" id="account" style="width: 40%"  readonly="readonly" 
+					data-options="label:'账号：',iconCls:'icon-man'">
+			</div>
+			<div style="margin-bottom: 20px">
+				<input class="easyui-textbox" id="aname" style="width: 40%"
+					data-options="label:'姓名：',required:true,iconCls:'icon-man',validType:'name'">
+			</div>
+			<div style="margin-bottom: 20px">
+				<input class="easyui-textbox" id="tel" style="width: 40%" 
+					data-options="label:'电话：',required:true,iconCls:'icon-tel',validType:'phone'">
+			</div>
+			<div style="margin-bottom: 20px">
+				<input class="easyui-textbox" id="role" style="width: 40%"  readonly="readonly" 
+					data-options="label:'管理员等级：',iconCls:'icon-man'">
+			</div>
+			<div style="margin-bottom: 20px">
+				<span style="float: center;">头像：</span> <input type="file" id="pic"
+					name="pic" style="width: 70% margin-left:"
+					onchange="setAdmImagePreviews(this,'showPics')">
+			</div>
+			<div style="margin-bottom: 20px; height: 80px; text-align: center;width:200px;margin-left:33%;"
+				id="showPics">
+				<img :src="headImg" height="200px" width="200px">
+				</div>
+			<div style="margin-bottom: 20px;margin-top: 150px;">
+				<button class="easyui-linkbutton" data-options="iconCls:'icon-add'"
+					onclick="submitForm()" style="width: 130px">修改</button>	
+				</div>
+		</form>
+</div>
+<script type="text/javascript">
+let login = new Vue({
+	el: "#changeAdmForm",
+	data: {
+		aid:"",
+		account:"",
+		aname: "",
+		status: 0,
+		level:"",
+		headImg:"",
+		tel:"",
+		role:""
+	},
+	mounted:function(){
+		axios.get("../adm/findCurrent").then(result=> {
+			if(result.data.success){ //已登录
+				this.aid = result.data.data.aid;
+				 $("#aid").textbox("setValue",this.aid);
+				this.aname = result.data.data.aname;
+				 $("#aname").textbox("setValue",this.aname);
+				this.account = result.data.data.account;		
+				 $("#account").textbox("setValue",this.account);
+			    this.role = result.data.data.role;
+			    this.headImg = result.data.data.headImg;
+			    this.tel = result.data.data.tel;
+				 $("#tel").textbox("setValue",this.tel);
+				 if(this.role == 1){
+					 $("#role").textbox("setValue", "超级管理员");
+				 }else{
+					 $("#role").textbox("setValue", "普通管理员");					 
+				 }
+     		}  else {
+				alert("请登陆后重试。。。")
+			}
+		})
+	}
+})
+
+$.extend($.fn.validatebox.defaults.rules, {
+	phone : { //验证手机号  
+		validator : function(value, param) {
+			return /^1[3-8]+\d{9}$/.test(value);
+		},
+		message : '请输入正确的手机号码'
+	},
+	name : {// 验证姓名，可以是中文或英文
+		validator : function(value) {
+			return /^[\u4e00-\u9fa5]+$/i.test(value)
+					| /^[A-Za-z]+$/i.test(value);
+		},
+		message : '请输入姓名(中文或者英文名)'
+	},
+	account : {// 验证用户名
+		validator : function(value) {
+			return /^[a-zA-Z][a-zA-Z0-9_]{5,15}$/i.test(value);
+		},
+		message : '用户名不合法（字母开头，允许6-16字节，允许字母数字下划线）'
+	},
+	password : {// 验证密码
+		validator : function(value) {
+			return /^[a-zA-Z0-9_]{5,15}$/i.test(value);
+		},
+		message : '密码不合法（允许6-16字节，允许字母数字下划线）'
+	}
+});
+
+function submitForm() {
+	var validate = $("#changeAdmForm").form('enableValidation').form('validate');
+	if (!validate){
+		return;
+	}
+	var aid = $.trim($("#aid").val());
+	var aname = $.trim($("#aname").val());
+	var tel = $.trim($("#tel").val());
+	var account = $.trim($("#account").val());
+	var role = $.trim($("#role").val());
+
+	if(role == "超级管理员"){
+		role=1;
+	}else{
+		role =0;
+	}
+	
+	$.ajaxFileUpload({
+		url : "/zyl/adm/update",
+		secureuri : false,
+		fileElementId : "pic",
+		dataType : "json",
+		data : {
+			aname : aname,
+			tel : tel,
+			aid: aid,
+			account: account,
+			role:role
+		},
+		success : function(data) {
+			if (data.success) {
+				alert("管理员信息修改成功...");
+				location.reload();
+			} else {
+				alert("管理员信息修改失败，请稍后重试...");
+			}
+		},
+		error : function(data, status, e) {
+			alert("管理员信息修改失败...\n" + e);
+		}
+	});
+}
+</script>
+</body>
+</html>

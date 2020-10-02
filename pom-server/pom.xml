@@ -19,7 +19,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -41,6 +40,38 @@
             <version>1.1.0</version>
         </dependency>
         <dependency>
+            <groupId>com.alipay.sdk</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
+            <version>4.9.9</version>
+        </dependency>
+        <!-- lucene 搜索 -->
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-core</artifactId>
+            <version>6.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-queryparser</artifactId>
+            <version>6.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-analyzers-common</artifactId>
+            <version>6.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-highlighter</artifactId>
+            <version>6.2.0</version>
+
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-analyzers-smartcn</artifactId>
+            <version>6.2.0</version>
+        </dependency>
+        <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
             <version>1.1.10</version>
@@ -55,7 +86,7 @@
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
         <!-- 管理session -->
-        <dependency>
+        <!--<dependency>
             <groupId>org.springframework.session</groupId>
             <artifactId>spring-session-data-redis</artifactId>
         </dependency>
@@ -73,7 +104,7 @@
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
-        </dependency>
+        </dependency>-->
         <!-- 读取注册中心 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -90,24 +121,24 @@
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
         <!--消息中间件-->
-        <dependency>
+      <!--  <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
-        </dependency>
+        </dependency>-->
         <!-- 为微服务构建消息驱动-->
-        <dependency>
+     <!--   <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-stream-rabbit</artifactId>
-        </dependency>
+        </dependency>-->
         <!--bus总线监听-->
-        <dependency>
+     <!--   <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-bus-amqp</artifactId>
-        </dependency>
-        <dependency>
+        </dependency>-->
+      <!--  <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
+        </dependency>-->
         <!--用来呈现sleuth的路由信息-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>

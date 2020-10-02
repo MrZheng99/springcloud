@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zj.product.dao.IFlowerTypeDao">
+	<select id="findAll" resultType="FlowerType">
+		select tid,tname,description,typeImg,status from tb_type;
+	</select>
+	<select id="find" resultType="FlowerType">
+		select tid,tname,description,typeImg,status from tb_type where status=1;
+	</select>
+	<insert id="insert" parameterType="FlowerType">
+		insert into tb_type(`tname`,`description`,`typeImg`,`status`) values(#{tname},#{description},#{typeImg},1);
+	</insert>
+	<update id="update" parameterType="FlowerType">
+		update tb_type
+		<set>
+			<if test="tname !=null and tname !='' ">
+				tname=#{tname},
+			</if>
+			<if test="description !=null and description !='' ">
+				description=#{description},
+			</if>
+			<if test="typeImg !=null and typeImg !='' ">
+				typeImg=#{typeImg},
+			</if>
+			<if test="status !=null and status !='' ">
+				status=#{status},
+			</if>
+		</set>
+		where `tid`=  #{tid};
+	</update>
+</mapper>
