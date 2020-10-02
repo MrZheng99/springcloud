@@ -17,6 +17,7 @@
         <module>user-server</module>
         <module>config-server</module>
         <module>order-server</module>
+        <module>pom-server</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
