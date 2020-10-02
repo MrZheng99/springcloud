@@ -1,0 +1,10 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: demo
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:9966/eureka/
