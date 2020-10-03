@@ -2,6 +2,7 @@ package com.zj.product.dao;
 
 import java.util.List;
 
+import com.zj.product.dto.ProductInfoDTO;
 import org.springframework.stereotype.Repository;
 
 import com.zj.product.entity.CartItem;
@@ -24,4 +25,8 @@ public interface IFlowerDao {
 	public Integer update(Flower flower);
 
 	public List<Flower> findIdAndName();
+
+	public List<ProductInfoDTO> findAllForTest();
+	public ProductInfoDTO findOneForTest();
+
 }

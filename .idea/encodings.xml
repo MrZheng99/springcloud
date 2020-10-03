@@ -5,7 +5,11 @@
     <file url="file://$PROJECT_DIR$/config-server/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/eureka-client/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/eureka-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/order-client/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/order-common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/order-common/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/order-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/order-view/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/pom-server/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/product-client/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/product-client/src/main/resources" charset="UTF-8" />

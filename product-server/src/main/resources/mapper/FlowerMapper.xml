@@ -145,5 +145,11 @@
 		</set>
 		where fid=#{fid};
 	</update>
-
+	<!--给外部测试使用-->
+	<select id="findAllForTest" resultType="ProductInfoDTO">
+		select fid,fname,description,flowerLan,flowerImg,deliveryDesc,price,sale,intro,pack,store,status,tid,sid from tb_flower;
+	</select>
+	<select id="findOneForTest" resultType="ProductInfoDTO">
+		select fid,fname,description,flowerLan,flowerImg,deliveryDesc,price,sale,intro,pack,store,status,tid,sid from tb_flower limit 0,1;
+	</select>
 </mapper>

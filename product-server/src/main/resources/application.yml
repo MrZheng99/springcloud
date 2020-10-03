@@ -27,21 +27,20 @@ spring:
   #数据库连接配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://120.26.184.107:3306/flowershop_flower?useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
+    url: jdbc:mysql://120.26.184.107:3306/flowershop?useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
     username: root
     password: Zheng1125
     type: com.alibaba.druid.pool.DruidDataSource
 
 
   #mybatis的相关配置
-  mybatis:
-    #mapper配置文件
-    mapper-locations: classpath:mapper/*.xml
-    type-aliases-package: com.zj.product.entity
-    #开启驼峰命名
-    configuration:
-      #map-underscore-to-camel-case: true
-      log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+mybatis:
+  #mapper配置文件
+  mapper-locations: mapper/*.xml
+  type-aliases-package: com.zj.product.entity,com.zj.product.dto
+  #开启驼峰命名
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 eureka:
   client:

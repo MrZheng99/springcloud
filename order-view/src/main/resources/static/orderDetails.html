@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<title>填写订单-花礼网</title>
+<meta name="description">
+<meta name="keywords">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="renderer" content="webkit|ie-comp">
+<link rel="stylesheet" type="text/css"
+	href="/zyl/front/css/orderDetails.css">
+
+</head>
+<body class="cart-flow">
+	<!-- 顶部导航 -->
+	<div class="site-nav">
+		<div class="container">
+			<ul class="site-nav-r">
+				<li class="menu login" id="LoginInfo"><a href="#"
+					rel="nofollow" id="btn-login">你好，请登录</a><a href="#" rel="nofollow"
+					id="btn-reg">注册</a></li>
+				<li class="site-nav-pipe">|</li>
+				<li class="menu"><a href="#">订单查询</a></li>
+
+
+			</ul>
+		</div>
+	</div>
+	<!-- 顶部导航 End -->
+
+
+
+	<section class="order-main" style="border-top: 1px solid #E9ECF0;">
+		<div class="order-container" id="orderDetails">
+
+			<!-- 收货人信息 -->
+			<div class="order-item" style="position: relative; margin-top: 24px;">
+				<h3 class="order-item-hd">收货人信息</h3>
+				<div class="order-item-content">
+					<div class="order-item-li">
+						<label class="order-item-title">现有地址</label> 
+							
+							<select class="order-item-input" @change="paddingAddr($event)">
+							<option value="-1">请选择</option>
+								<option v-for="(addr,index) in allAddr" :value="index">{{addr.nickName+"-"+addr.tel+"-"+addr.city+addr.details}}</option>
+							</select>
+					</div>
+				</div>
+				<!-- 没有地址记录 -->
+				<div class="order-item-content">
+					<div class="order-item-li">
+						<label class="order-item-title">收货人</label> <input
+							class="order-item-input" placeholder="请输入收货人姓名" type="text"
+							v-model="toName"  maxlength="15" autocomplete="off">
+					</div>
+					<div class="order-item-li">
+						<label class="order-item-title">手机号码</label> <input
+							class="order-item-input" placeholder="请输入收货人手机号码" type="text"
+							v-model="toMobile"  maxlength="11" autocomplete="off">
+					</div>
+					<div class="order-item-li">
+						<label class="order-item-title">所在地区</label><select
+								@change="selectProvince($event)" id="province">
+								<option :value="prov.name" v-for="prov in province">{{prov.name}}
+								</option>
+							</select> <select id="city" @change="selectCity($event)">
+								<option :value="c.name" v-for="c in city">{{c.name}}</option>
+							</select> <select id="area" @change="selectArea($event)">
+								<option :value="a.name" v-for="a in area">{{a.name}}</option>
+							</select>
+								<div id="address" style="display: none"></div>
+							
+					</div>
+					<div class="order-item-li">
+						<label class="order-item-title">详细地址</label>
+						<div class="order-item-input-box">
+							<input placeholder="请输入收货人详细地址" type="text"
+								v-model="toDetails" maxlength="50" autocomplete="120"
+>						</div>
+					</div>
+				</div>
+			</div>
+		
+		<!-- 核对购物清单 -->
+		<div class="order-item order-item-border-bottom order-item-line">
+			<h3 class="order-item-hd">核对购物清单</h3>
+			<div class="order-item-product-list">
+				<div class="order-item-product-li" v-for="detail in details">
+					<a href="" target="_blank"
+						style="display: inline-block; width: 100%; height: 100%;">
+						<div class="order-item-product-pic">
+							<img :src="'../'+detail.flowerFirstImg" :alt="detail.fname">
+						</div>
+						<div class="order-item-product-info">
+							<p class="order-item-product-name">{{detail.fname}}</p>
+							<div>
+								<span class="order-item-product-price">{{detail.price}}</span> <span
+									class="order-item-product-count">x&nbsp;{{detail.num}}</span>
+							</div>
+						</div>
+					</a>
+				</div>
+			</div>
+			<div class="order-item-footer">
+				<div class="order-item-footer-left">
+
+					<div class="order-item-footer-receiver">
+						<span id="receiver_name" class="receiver-name"></span> <span
+							id="receiver_tel"></span>
+					</div>
+				</div>
+				<div class="order-item-footer-right">
+					<div class="order-item-footer-price">
+						共<span id="pro_count" class="pro-count" ></span>{{totalNum}}件商品，总商品金额： <span
+							id="pro_price" class="pro-price" >{{totalAmount}}</span>
+					</div>
+					<div class="order-item-footer-pay">
+						应付：<span class="pay-price " id="payMoney">{{amount}}</span>
+						<button class="pay-btn" id="pay_btn" @click="pay">提交订单</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		</div>
+	</section>
+</body>
+<script type="text/javascript"
+	src="//api.map.baidu.com/api?v=2.0&ak=Fn0BvD3aGemRSpKuVLa6wn9AWWc01EsX"></script><script type="text/javascript" src="/zyl/back/js/vue.js"></script>
+<script type="text/javascript" src="/zyl/front/js/qs.js"></script>
+<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+
+<script src="/zyl/back/js/axios.js" type="text/javascript"></script>
+<script type="text/javascript">
+let vm=new Vue({
+	el:"#orderDetails",
+	data:{
+		toMobile:'',
+		toName:'',
+		toProvince:'',
+		toCity:'',
+		toArea:'',
+		toDetails:'',
+		province: '',
+        city: '',
+        area: '',
+		details:'',
+		allAddr:'',
+		amount:0,
+		oid:'',
+		totalNum:0,
+		totalAmount:0
+	},
+	methods:{
+		 mProvince: function(val) {
+             for (let i = 0, len = this.province.length; i < len; i++) {
+                 if (this.province[i].name == val) {
+                     this.city = this.province[i].sub;
+                     this.area = '';
+                     return;
+                 }
+             }
+         },
+         mCity: function(val) {
+             for (let i = 0, len = this.city.length; i < len; i++) {
+                 if (this.city[i].name == val) {
+                     this.area = this.city[i].sub;
+                     return;
+                 }
+             }
+         },
+         selectProvince: function(e) {
+             console.log(e.currentTarget.value);
+             let val = e.currentTarget.value;
+             this.toProvince = val;
+             this.mProvince(val);
+
+         },
+         selectCity: function(e) {
+             let val = e.currentTarget.value;
+             console.log(this.city);
+             this.toCity = val;
+             this.mCity(val);
+         },
+         selectArea: function(e) {
+             this.toArea = e.currentTarget.value;
+         },
+         paddingAddr:function(e){
+        	 if(e.target.value==-1){            	 
+             	this.toMobile='';
+             	this.toName='';
+                this.toProvince ='';
+             	this.mProvince("请选择");
+                this.toCity = '';
+             	this.mCity("请选择");
+             	this.toArea='';
+             	//渲染完在选择
+                 setTimeout(function(){
+                 	 $("#province").val("请选择");
+                      $("#city").val("请选择");
+                      $("#area").val("请选择");
+                 },300);
+             	this.toDetails="";
+             	return;
+        	 }
+        		 
+        	let item= this.allAddr[e.target.value];
+        	this.toMobile=item.tel;
+        	this.toName=item.nickName;
+        	let temp=item.city.split("-");
+            this.toProvince =temp[0];
+        	this.mProvince(temp[0]);
+            this.toCity = temp[1];
+        	this.mCity(temp[1]);
+        	if(temp.length>2){
+        		this.toArea=temp[2]
+        	}
+        	//渲染完在选择
+            setTimeout(function(){
+            	 $("#province").val(temp[0]);
+                 $("#city").val(temp[1]);
+                 $("#area").val(temp[2]);
+            },300);
+        	this.toDetails=item.details;
+         },
+         pay:function(){
+        	 let address = this.toProvince+ this.toCity+ this.toArea+ this.toDetails;
+        	 axios.post("/zyl/order/updateReceiveInfo",{oid:this.oid,address:address,receivePerson:this.toName,tel:this.toMobile}).then(res=>{
+     			if(res.data.success)
+     				location.href="/zyl/order/getPayPage/"+this.oid;
+     			else
+     				alert(res.data.msg);
+     		});
+         }
+	},
+	mounted:function(){
+		axios.get("/zyl/front/js/city.json").then(res => {
+             this.province = res.data;
+        });
+		//获取orderID
+		let temp = location.href.split("/");
+		this.oid = temp[temp.length-1];
+		//获取总额
+		axios.get("/zyl/order/findByOid/"+this.oid).then(res=>{
+			this.amount=res.data.data.amount;
+		});
+		//获取所有订单内的所有商品
+		axios.post("/zyl/orderDetails/findByOid",qs.stringify({oid:this.oid})).then(res=>{
+			this.details = res.data.data;
+			for(let i=0,len=this.details.length;i<len;i++){
+				this.totalAmount+=this.details[i].price*parseInt(this.details[i].num);
+				this.totalNum+=parseInt(this.details[i].num);
+			}
+		});
+		//获取地址
+		axios.get("/zyl/address/findCurrent").then(res=>{
+			this.allAddr=res.data.data;
+			console.log(res);
+		});
+	},
+	created: function() {
+        // 百度地图API功能	
+        var map = new BMap.Map("address");
+        var point = new BMap.Point(116.331398, 39.897445);
+        map.centerAndZoom(point, 12);
+        var geoc = new BMap.Geocoder();
+        var geolocation = new BMap.Geolocation();
+        let that = this;
+        geolocation.getCurrentPosition(function(r) {
+            if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+                var mk = new BMap.Marker(r.point);
+                geoc.getLocation(r.point, function(rs) {
+                        var addComp = rs.addressComponents;
+                        console.info(addComp);
+                        let prov;
+                        if (addComp.province.length > 3) {
+                            prov = addComp.province.substring(0, 3);
+                        } else {
+                            prov = addComp.province.substring(0, 2);
+                        }
+                        let c;
+                        if (addComp.city.length > 2) {
+                            c = addComp.city.substring(0, 2);
+                        } else {
+                            c = addComp.city.substring(0, 1);
+                        }
+                    
+                        that.mProvince(prov);
+                        that.mCity(c);
+                        //渲染完在选择
+                        setTimeout(function(){
+                        	 $("#province").val(prov);
+                             $("#city").val(c);
+                             $("#area").val(addComp.district);
+                        },300);
+                        	
+                    }
+
+                );
+            } else {
+                alert('failed' + this.getStatus());
+            }
+        }, {
+            enableHighAccuracy: true
+        })
+       
+    }
+})
+
+</script>
+</html>

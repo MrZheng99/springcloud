@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="erueka-client" />
+        <module name="order-common" />
         <module name="Demo" />
         <module name="user-server" />
         <module name="ribbon" />
@@ -18,10 +19,15 @@
         <module name="zuul-server" />
         <module name="config-server" />
         <module name="product-client" />
+        <module name="order-view" />
         <module name="eureka-client" />
+        <module name="order-client" />
         <module name="product-view" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="order-common" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
@@ -29,7 +35,10 @@
       <module name="config-server" options="-parameters" />
       <module name="eureka-client" options="-parameters" />
       <module name="eureka-server" options="-parameters" />
+      <module name="order-client" options="-parameters" />
+      <module name="order-common" options="-parameters" />
       <module name="order-server" options="-parameters" />
+      <module name="order-view" options="-parameters" />
       <module name="pom-server" options="-parameters" />
       <module name="product-client" options="-parameters" />
       <module name="product-common" options="-parameters" />
