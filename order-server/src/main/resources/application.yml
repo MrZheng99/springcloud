@@ -43,8 +43,10 @@ spring:
       #map-underscore-to-camel-case: true
       log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
-
-
+#启用fegin
+feign:
+  hystrix:
+    enabled: true
 eureka:
   client:
     service-url:

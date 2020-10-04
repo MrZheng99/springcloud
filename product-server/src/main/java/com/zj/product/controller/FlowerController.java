@@ -1,4 +1,4 @@
-package com.zj.product.controller.impl;
+package com.zj.product.controller;
 
 import java.util.Map;
 
@@ -11,36 +11,35 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.zj.product.controller.IFlowerController;
 import com.zj.product.entity.Flower;
 import com.zj.product.entity.ResponseJson;
 import com.zj.product.service.IFlowerService;
 
 @RestController
 @RequestMapping("flower")
-public class FlowerController implements IFlowerController {
+public class FlowerController {
 	@Autowired
 	IFlowerService flowerService;
 
-	@Override
+	
 	@RequestMapping("/findAll")
 	public ResponseJson findAll() {
 		return flowerService.findAll();
 	}
 
-	@Override
+	
 	@RequestMapping("/find")
 	public ResponseJson find(@RequestBody Flower flower) {
 		return flowerService.find(flower);
 	}
 
-	@Override
+	
 	@RequestMapping("/{fid}")
 	public ResponseJson find(@PathVariable Integer fid) {
 		return flowerService.find(fid);
 	}
 
-	@Override
+	
 	@PostMapping("/insert")
 	public ResponseJson insert(@RequestParam("pics") MultipartFile[] files, @RequestParam String fname,
 			@RequestParam String description, @RequestParam String flowerLan, @RequestParam String deliveryDesc,
@@ -51,19 +50,19 @@ public class FlowerController implements IFlowerController {
 				sid, tid);
 	}
 
-	@Override
+	
 	@PostMapping("/update")
 	public ResponseJson update(@RequestBody Flower flower) {
 		return flowerService.update(flower);
 	}
 
-	@Override
+	
 	@PostMapping(value = "/uploadImage")
 	public Map<String, Object> uploadImage(@RequestParam("upload") MultipartFile file) {
 		return flowerService.uploadImage(file);
 	}
 	
-	@Override
+	
 	@RequestMapping("/findIdAndName")
 	public ResponseJson findIdAndName() {
 		return flowerService.findIdAndName();
