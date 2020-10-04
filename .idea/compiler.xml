@@ -16,18 +16,18 @@
         <module name="order-server" />
         <module name="product-common" />
         <module name="eureka-server" />
+        <module name="user-common" />
         <module name="zuul-server" />
         <module name="config-server" />
         <module name="product-client" />
         <module name="order-view" />
         <module name="eureka-client" />
         <module name="order-client" />
+        <module name="user-client" />
         <module name="product-view" />
+        <module name="user-view" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="order-common" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
@@ -45,7 +45,10 @@
       <module name="product-server" options="-parameters" />
       <module name="product-view" options="-parameters" />
       <module name="ribbon" options="-parameters" />
+      <module name="user-client" options="-parameters" />
+      <module name="user-common" options="-parameters" />
       <module name="user-server" options="-parameters" />
+      <module name="user-view" options="-parameters" />
       <module name="zuul-server" options="-parameters" />
     </option>
   </component>

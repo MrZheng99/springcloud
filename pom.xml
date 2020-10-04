@@ -15,16 +15,20 @@
         <module>Demo</module>
         <module>zuul-server</module>
         <module>user-server</module>
+        <module>user-common</module>
+        <module>user-client</module>
+        <module>user-view</module>
+
         <module>config-server</module>
-        <module>order-server</module>
         <module>pom-server</module>
         <module>product-server</module>
         <module>product-common</module>
         <module>product-client</module>
         <module>product-view</module>
+        <module>order-server</module>
         <module>order-client</module>
         <module>order-view</module>
-        <module>untitledorder</module>
+        <module>order-common</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

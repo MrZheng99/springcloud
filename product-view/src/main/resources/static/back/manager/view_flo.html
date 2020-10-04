@@ -1,0 +1,189 @@
+<table id="view_flo_data" data-options="fit:true">
+</table>
+
+<div id="view_goods_search">
+   <div class="datagrid-btn-separator"></div>
+   <label>鲜花类型:</label>
+   <select id="view_flo_search_tid">
+       <option value=''>--请选择--</option>
+   </select> 
+   <label>鲜花系列:</label>
+   <select id="view_flo_search_sid">
+       <option value=''>--请选择--</option>
+   </select> 
+   <!-- 
+   <label>最低价:</label>
+   <input id="lprice" type="text">
+    <label>最搞价:</label>
+   <input id="hprice" type="text">  
+    <label>鲜花名称:</label>
+     --> 
+   <input type="text" placeholder="请输入菜品名称..." id="views_flo_search_fname" />
+   <a href="javascript:searchFloInfo()" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a>
+   <a href="javascript:editFlower()" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" style="float:left">编辑</a>
+</div>
+<div id="view_flo_dialog" data-options="closed:true">
+
+</div>
+<script>
+var view_flo_obj;
+var statusObj = [{fno:0, fname:"不可用"}, {fno:1, fname:"可用"}];
+var flo_editRow = undefined;
+var flo_op;
+var flo_flag;
+
+$(function(){
+	$.post("/zyl/flowerType/findAll", data=>{
+		var str="";
+		$.each(data.data, function(index, item) {
+			str +="<option value='" + item.tid + "'>" + item.tname + "</option>";
+		})
+		$("#view_flo_search_tid").append($(str));
+	}, "json");
+	
+	$.post("/zyl/flowerSeries/findAll", data=>{
+		var str="";
+		$.each(data.data, function(index, item) {
+			str +="<option value='" + item.sid + "'>" + item.sname + "</option>";
+		})
+		$("#view_flo_search_sid").append($(str));
+	}, "json");
+})
+
+
+
+var view_flo_obj = $('#view_flo_data').datagrid({
+	url:'/zyl/flower/findAll',
+	method:"get",
+	fitColumns: true,
+	loadMsg: '数据加载中，请稍后...',
+	striped: true,
+	remoteSort: false,
+	singleSelct: true,
+	pagination: true,
+	rownumbers: true,
+	pageSize: 10,
+	pageList: [10, 15, 20, 30, 40, 50, 100],
+	loadFilter:function(data){
+		info["total"]= data.data.length;
+		info["rows"]= data.data;
+		return info;
+	},
+	columns:[[
+		{field:'fid',title:'鲜花编号',width:50,align:'center'},
+		{field:'fname', title:'鲜花名称',width:100,align:'center'},
+		{field:'type.tname', title:'所属类型',width:50,align:'center',formatter: function(value,row,index){
+				return row.type.tname;
+		    }
+        },
+		{field:'seris.name', title:'所属系列',width:50,align:'center',formatter: function(value,row,index){
+			return row.series.sname;
+	        }
+        },
+		{field:'price', title:'单价',width:50,align:'center'},
+		{field:'deliveryDesc', title:'配送说明',width:100,align:'center'},
+		{field:'status',title:'类型状态',width:50,align:'center', formatter:function(val, row, index){
+			if(val == 0){
+				return "不可用";
+			} else{
+				return "可用";
+			}
+		}, editor:{type: "combobox", options:{required: true,  valueField:"tno", textField:"tname", data:statusObj}}}
+	]],
+	toolbar: "#view_goods_search"
+});
+
+
+function searchFloInfo(){
+	var tid= $.trim($("#view_flo_search_tid").val());
+	var sid= $.trim($("#view_flo_search_sid").val());
+	var fname = $.trim($("#views_flo_search_fname").val());
+	//var lprice = $.trim($("#lprice").val());
+	//var hprice = $.trim($("#hprice").val());
+	
+	view_flo_obj.datagrid({
+		   loader : function(flower, success, error) {
+               $.ajax({
+                   type : "post",
+                   url : "/zyl/flower/find",
+                   dataType : 'json',
+                   contentType : 'application/json;charset=utf-8', // 设置请求头信息
+                   data : JSON.stringify({tid:tid,sid:sid,fname:fname}),
+                   success : function(data) {       
+                             success(data);           
+                   }
+               });
+           }
+
+	})
+}
+
+function editFlower(){
+	var row = view_flo_obj.datagrid("getSelected");
+	if(flo_editRow != undefined){
+		return;
+	}
+	
+	if( row == null){
+		$.messager.show({title:'温馨提示',msg: '请选择您要修改的鲜花...', timeout:2000, showType:'slide'});
+		return;
+	}
+	flo_editRow = view_flo_obj.datagrid("getRowIndex", row);
+	
+	var fid = row.fid;
+	var fname = row.fname;
+		
+	$("#view_flo_dialog").dialog({
+		title:fname +  "--信息修改",
+		width:1100,
+	    height:600,
+	    closed:false,
+	    closable:false,
+	    cache:false,
+	    resizable:true,
+	    iconCls:"icon-edit",
+	    modal:true,
+	    href:"manager/view_flo_details.html",
+	    buttons:[{
+	    	text:"关闭",
+	    	iconCls:"icon-cancel",
+	    	handler:function(){
+		    	flo_editRow = undefined;
+				row = null;
+				$("#view_flo_dialog").dialog('close');
+			}
+	    }],
+	    onLoad:function(){
+	       $("#floType").val(row.tid);
+	       $("#floSeries").val(row.sid);
+	       $("#fname").val(row.fname);
+	       $("#price").val(row.price);
+	       $("#sale").val(row.sale);
+	       $("#deliveryDesc").val(row.deliveryDesc);
+	       $("#pack").val(row.pack);
+	       $("#flowerLan").val(row.flowerLan);
+	       $("#intro").val(row.intro)
+	       $("#store").val(row.store)
+	       $("#editor2").val(row.description)
+	       var pic = row.flowerImg.split(",");
+	  /*      var str = "";
+	       for(let i=0; i<pic.length; i++){
+	    	   str += "<td><div style='text-align:center' id='showPics" + i + "' ><img width='150px' height='150px' src=' "+ pic[i] + "' id='showPics" + i + "_img" + i + "' /> <input type='file' id='pic_"+ i + "'  style='display:none;' onchange='show_img(this ,"+ i +")'> <input type='button' value='修改图片' onclick='modify_img("+i+")'> </div></td>";
+	       }
+	       $("#showPics").html(str); */
+	    }
+	});
+	
+}
+
+function modify_img(i){
+	$("#pic_" + i).click();
+}
+
+function show_img(imagesObj,i){
+	modifyFloImagePreviews(imagesObj, 'showPics' + i , i);
+}
+</script>
+
+<script>
+</script>
